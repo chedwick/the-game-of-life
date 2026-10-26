@@ -7,8 +7,6 @@
 #define NEAREST_PIXEL_SAMPLING "0"
 #define DISABLE_HIGH_DPI_SCALING "1"
 
-#define TRACE printf
-
 int sdl_initialization(void)
 {
     // Optional Nearest-Neighbor Scaling: Use
@@ -22,7 +20,7 @@ int sdl_initialization(void)
                     // | SDL_INIT_VIDEO*/
     if (SDL_Init(sdl_flags) < 0)
     {
-        TRACE("SDL_Init failed: %s\n", SDL_GetError());
+        printf("SDL_Init failed: %s\n", SDL_GetError());
         return 1;
     }
 
@@ -30,14 +28,14 @@ int sdl_initialization(void)
     int img_flags = IMG_INIT_PNG;
     if (!(IMG_Init(img_flags) & img_flags))
     {
-        TRACE("IMG_Init failed: %s\n", IMG_GetError());
+        printf("IMG_Init failed: %s\n", IMG_GetError());
         SDL_Quit();
         return 1;
     }
 
     if (TTF_Init() < 0)
     {
-        TRACE("TTF_Init failed: %s\n", TTF_GetError());
+        printf("TTF_Init failed: %s\n", TTF_GetError());
         IMG_Quit();
         SDL_Quit();
         return 1;
@@ -55,7 +53,7 @@ int sdl_finalization(void)
     return 0;
 }
 
-SDL_Window* construct_gfx_sdl_window(char* window_title,
+SDL_Window* sdl_window_create(char* window_title,
                                      uint16_t height, uint16_t width)
 {
    SDL_Window *window = SDL_CreateWindow(window_title,
@@ -65,33 +63,33 @@ SDL_Window* construct_gfx_sdl_window(char* window_title,
                                          SDL_WINDOW_SHOWN);
    if (!window)
    {
-       TRACE("Window creation failed: %s\n", SDL_GetError());
+       printf("Window creation failed: %s\n", SDL_GetError());
        return NULL;
    }
 
    return window;
 }
 
-void destruct_gfx_sdl_window(SDL_Window *window)
+void sdl_window_destroy(SDL_Window *window)
 {
     if (window)
         SDL_DestroyWindow(window);
 }
 
-SDL_Renderer* construct_gfx_sdl_renderer(SDL_Window* window)
+SDL_Renderer* sdl_renderer_create(SDL_Window* window)
 {
    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
                                                SDL_RENDERER_ACCELERATED);
    if (!renderer)
    {
-       TRACE("Renderer creation failed: %s\n", SDL_GetError());
+       printf("Renderer creation failed: %s\n", SDL_GetError());
        return NULL;
    }
 
    return renderer;
 }
 
-void destruct_gfx_sdl_renderer(SDL_Renderer *renderer)
+void sdl_renderer_destroy(SDL_Renderer *renderer)
 {
     if (renderer)
         SDL_DestroyRenderer(renderer);

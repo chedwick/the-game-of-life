@@ -1,6 +1,7 @@
 #include "game.h"
-#include "game_initialization.h"
+#include "sdl.h"
 #include "game_finalization.h"
+
 
 #include "../gol.h"
 
@@ -18,16 +19,19 @@ game_s game = {
     .renderer = NULL,
 };
 
-int game_initialization(void)
+void game_initialization(void)
 {
-    if (initialize_window() != 0)
-    {
-        return 1;
-    }
-    if (initialize_renderer() != 0)
-    {
-        return 1;
-    }
+    SDL_Window *window = sdl_window_create(TITLE,
+                                                  GRID_HEIGHT * ZOOM,
+                                                  GRID_WIDTH * ZOOM);
+    if (!window)
+        return;
+    game.window = window;   
+
+    SDL_Renderer *renderer = sdl_renderer_create(game.window);
+    if (!renderer)
+        return;
+    game.renderer = renderer;   
 
     game.running = true;
     game.update = true;
@@ -37,23 +41,29 @@ int game_initialization(void)
 
     grid = grid_create(GRID_WIDTH, GRID_HEIGHT);
     if (!grid)
-        return 1;
+        return;
 
     grid_randomize(grid, ALIVE_PERCENT);
-    return 0;
 }
 
-int game_finalization(void)
+void game_finalization(void)
 {
-    if (finalize_window() != 0)
-    {
-        return 1;
-    }
-    if (finalize_renderer() != 0)
-    {
-        return 1;
-    }
-    return 0;
+    sdl_window_destroy(game.window);
+    game.window = NULL;
+
+    sdl_renderer_destroy(game.renderer);
+    game.renderer = NULL;
+}
+
+void game_input(void)
+{
+    game_tick();
+    game_pool_events();
+}
+
+void game_update(void)
+{
+    // TODO: Implement game update
 }
 
 void game_output(void)
@@ -72,3 +82,18 @@ void game_output(void)
     // Consume the output tick event.
     // game.output = false;
 }
+
+
+// int initialize_fonts(void)
+// {
+//     gfx_font_s *font = construct_gfx_font("assets/gabs_pixel.ttf");
+//     if (font)
+//     {
+//         SDL_Color color = {255, 255, 255, 255};
+//         gfx_gpu_text_s *text_score =
+//             gfx_gpu_text_render(game.renderer, font, "SCORE", color);
+//         game.font = font;
+//         game.text_score = text_score;
+//     }
+//     return 0;
+// }

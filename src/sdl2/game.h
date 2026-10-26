@@ -47,10 +47,11 @@ typedef struct Game {
  
 extern game_s game;
 
-int game_initialization(void);
-int game_finalization(void);
-int game_input(void);
-int game_update(void);
+void game_initialization(void);
+void game_finalization(void);
+
+void game_input(void);
+void game_update(void);
 void game_output(void);
 
 void game_tick(void);
