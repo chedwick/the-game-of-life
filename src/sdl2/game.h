@@ -8,16 +8,18 @@
 
 #define TILE_HEIGHT 32
 #define TILE_WIDTH 32
+#define ZOOM 2
 
 #define GRID_ROWS 20
 #define GRID_COLS 30
 #define GRID_HEIGHT TILE_HEIGHT * GRID_ROWS
 #define GRID_WIDTH TILE_WIDTH * GRID_COLS
+#define WINDOW_HEIGHT GRID_HEIGHT * ZOOM
+#define WINDOW_WIDTH GRID_WIDTH * ZOOM
 
 #define SPEED 200
 #define FRAME_RATE 100
 
-#define ZOOM 2
 
 // Temporary to make it compatible with NCURSES
 #define KEY_DOWN	0402		/* down-arrow key */

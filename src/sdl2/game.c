@@ -1,6 +1,5 @@
 #include "game.h"
 #include "sdl.h"
-#include "game_finalization.h"
 
 
 #include "../gol.h"
@@ -21,9 +20,7 @@ game_s game = {
 
 void game_initialization(void)
 {
-    SDL_Window *window = sdl_window_create(TITLE,
-                                                  GRID_HEIGHT * ZOOM,
-                                                  GRID_WIDTH * ZOOM);
+    SDL_Window *window = sdl_window_create(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT);
     if (!window)
         return;
     game.window = window;   
