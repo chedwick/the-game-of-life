@@ -1,7 +1,3 @@
-/**
- @file main.c
- @brief Run the game loop. The renderer is selected by the makefile (-DNCURSES, -DSDL2, -DSFML, -DSDL3, or -DRAYLIB). NCURSES is the default.
- */
 #include <stdlib.h>
 
 #if defined(SDL2)
@@ -25,10 +21,10 @@ int main(int argc, char *argv[])
     while (game.running)
     {
         game_input();
-        if (game.update)
-            game_update();
-        if (game.output)
-            game_output();
+    //     if (game.update)
+    //         game_update();
+    //     if (game.output)
+    //         game_output();
     }
 
     game_finalization();
