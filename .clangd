@@ -7,3 +7,12 @@ CompileFlags:
     - -g
     - -isystem
     - C:/msys64/mingw64/include
+
+---
+# Headers have no compile command of their own. clangd otherwise parses
+# them as Objective-C++, which rejects -std=c11. This project is C only.
+If:
+  PathMatch: .*\.h$
+CompileFlags:
+  Add:
+    - -xc-header
