@@ -1,7 +1,7 @@
 # The Game of Life
 
 CC = gcc
-CFLAGS = -Wall -g -std=c11
+CFLAGS = -Wall -g -std=c11 -DNCURSES
 
 SRCDIR = src
 BUILDDIR = build
