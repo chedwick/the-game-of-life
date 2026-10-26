@@ -4,14 +4,10 @@
  */
 #include <stdlib.h>
 
-#include "game.h"
-#include "ncurses.h"
+#include "ncurses/game.h"
 
 int main(void)
 {
-    if (ncurses_initialization() != 0)
-        return EXIT_FAILURE;
-
     game_initialization();
 
     while (game.running)
@@ -24,6 +20,5 @@ int main(void)
     }
 
     game_finalization();
-    ncurses_finalization();
     return EXIT_SUCCESS;
 }

@@ -8,7 +8,8 @@ BUILDDIR = build
 
 TARGET = $(BUILDDIR)/gol
 
-SOURCES = main.c game.c gol.c ncurses.c
+NCURSES_SOURCES = ncurses/ncurses.c ncurses/game.c
+SOURCES = main.c gol.c $(NCURSES_SOURCES)
 OBJECTS = $(SOURCES:%.c=$(SRCDIR)/%.o)
 
 all: $(TARGET)

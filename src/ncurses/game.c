@@ -1,6 +1,7 @@
 #include "game.h"
 
-#include "gol.h"
+#include "../gol.h"
+
 #include "ncurses.h"
 
 #include <stdlib.h>
@@ -30,6 +31,9 @@ static void draw_cell(int x, int y, int alive, void *userdata)
 
 void game_initialization(void)
 {
+    if (ncurses_initialization() != 0)
+        return;
+
     int screen_w = 0;
     int screen_h = 0;
     int width;
@@ -65,6 +69,7 @@ void game_finalization(void)
 {
     grid_destroy(grid);
     grid = NULL;
+    ncurses_finalization();
 }
 
 void game_input(void)
