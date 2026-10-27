@@ -1,0 +1,53 @@
+# The Game of Life — SDL2
+
+CC = gcc
+CFLAGS = -Wall -g -std=c11 -DSDL2
+
+SRC_DIR = src
+BUILD_DIR = build
+
+TARGET = $(BUILD_DIR)/gol
+
+SDL2_SOURCES = sdl2/sdl.c \
+	sdl2/game.c \
+	sdl2/sdl_controller.c \
+	sdl2/game_input.c \
+	sdl2/game_output.c
+#	sdl2/game_output.c
+# 	sdl2/game_output.c
+SOURCES = $(addprefix $(SRC_DIR)/,main.c gol.c $(SDL2_SOURCES))
+OBJECTS = $(SOURCES:.c=.o)
+
+SDL2_CFLAGS := $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
+SDL2_LIBS := $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
+
+ifeq ($(strip $(SDL2_LIBS)),)
+SDL2_LIBS = -lSDL2 -lSDL2_image -lSDL2_ttf
+endif
+
+CFLAGS += $(SDL2_CFLAGS)
+LDLIBS = $(SDL2_LIBS)
+
+all: $(TARGET)
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+$(TARGET): $(OBJECTS) | $(BUILD_DIR)
+	$(CC) $(OBJECTS) $(LDLIBS) -o $@
+
+$(SRC_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OBJECTS) $(TARGET)
+	rmdir $(BUILD_DIR) 2>/dev/null || true
+
+debug:
+	@echo TARGET: $(TARGET)
+	@echo OBJECTS: $(OBJECTS)
+	@echo SOURCES: $(SOURCES)
+	@echo CFLAGS: $(CFLAGS)
+	@echo LDLIBS: $(LDLIBS)
+
+.PHONY: all clean debug

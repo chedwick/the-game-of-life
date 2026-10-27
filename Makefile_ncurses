@@ -1,0 +1,37 @@
+# The Game of Life — ncurses
+
+CC = gcc
+CFLAGS = -Wall -g -std=c11 -DNCURSES
+
+SRCDIR = src
+BUILDDIR = build
+
+TARGET = $(BUILDDIR)/gol
+
+NCURSES_SOURCES = ncurses/ncurses.c ncurses/game.c
+SOURCES = main.c gol.c $(NCURSES_SOURCES)
+OBJECTS = $(SOURCES:%.c=$(BUILDDIR)/%.o)
+
+LDLIBS = -lncursesw
+
+all: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	@mkdir -p $(dir $@)
+	$(CC) $(OBJECTS) $(LDLIBS) -o $(TARGET)
+
+$(BUILDDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -rf $(BUILDDIR)
+
+debug:
+	echo TARGET: $(TARGET)
+	echo OBJECTS: $(OBJECTS)
+	echo SOURCES: $(SOURCES)
+	echo CFLAGS: $(CFLAGS)
+	echo LDLIBS: $(LDLIBS)
+
+.PHONY: all clean debug

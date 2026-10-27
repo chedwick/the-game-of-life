@@ -1,35 +1,47 @@
-# The Game of Life
+# The Game of Life - Main Build System
+# Delegates to framework-specific makefiles based on target
 
-CC = gcc
-CFLAGS = -Wall -g -std=c11
+.PHONY: all clean debug help ncurses sdl2 sdl3 sfml raylib
 
-SRCDIR = src
-BUILDDIR = build
+# Default target is ncurses
+all: help
 
-TARGET = $(BUILDDIR)/gol
+help:
+	@echo "The Game of Life - Build System"
+	@echo ""
+	@echo "Available targets:"
+	@echo "  make ncurses  Build with ncurses (default)"
+	@echo "  make sdl2     Build with SDL2"
+	@echo "  make sdl3*    Build with SDL3"
+	@echo "  make sfml*    Build with SFML"
+	@echo "  make raylib*  Build with Raylib"
+	@echo "  make clean    Clean all build artifacts"
+	@echo "  make debug    Show build configuration"
+	@echo "  make help     Show this message"
+	@echo ""
+	@echo "(*) not yet supported"
+ncurses:
+	$(MAKE) -f Makefile_ncurses all
 
-SOURCES = main.c gol.c
-OBJECTS = $(SOURCES:%.c=$(SRCDIR)/%.o)
+sdl2:
+	$(MAKE) -f Makefile_sdl2 all
 
-all: $(TARGET)
+sdl3:
+	@echo "SDL3 support not yet available"
 
-$(BUILDDIR):
-	mkdir -p $(BUILDDIR)
+sfml:
+	@echo "SFML support not yet available"
 
-$(TARGET): $(OBJECTS) | $(BUILDDIR)
-	$(CC) $(OBJECTS) -lncursesw -o $(TARGET)
-
-$(SRCDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+raylib:
+	@echo "Raylib support not yet available"
 
 clean:
-	rm -f $(OBJECTS) $(TARGET)
-	rmdir $(BUILDDIR) 2>/dev/null || true
+	$(MAKE) -f Makefile_ncurses clean
+	$(MAKE) -f Makefile_sdl2 clean
 
 debug:
-	echo TARGET: $(TARGET)
-	echo OBJECTS: $(OBJECTS)
-	echo SOURCES: $(SOURCES)
-	echo CFLAGS: $(CFLAGS)
-
-.PHONY: all clean debug
+	@echo "=== ncurses build configuration ==="
+	@$(MAKE) -f Makefile_ncurses debug
+	@echo ""
+	@echo "=== SDL2 build configuration ==="
+	@$(MAKE) -f Makefile_sdl2 debug

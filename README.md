@@ -22,13 +22,13 @@ Rules:
 - Death by underpopulation: a live cell with fewer than 2 live neighbors dies.
 - Death by overpopulation: a live cell with more than 3 live neighbors dies.
 
-## Grid Edges
+### Grid Edges
 
 - Dead edges: out-of-bounds cells are treated as permanently dead.
 - Toroidal (wrapping/periodic): the edges wrap around, so the left edge connects
   to the right, and top to bottom.
 
-## Cell Patterns
+### Cell Patterns
 
 - Still lifes: Block, Beehive, Loaf
 - Oscillators:
@@ -37,3 +37,16 @@ Rules:
   - Pentadecathlon (period 15)
 - Spaceships: Glider (moves diagonally), Lightweight spaceship (LWSS).
 - Infinite growth: Gosper Glider Gun.
+
+## Build
+
+```bash
+make help
+```
+
+### Dependencies
+
+Libraries:
+
+- NCURSES
+- SDL2
