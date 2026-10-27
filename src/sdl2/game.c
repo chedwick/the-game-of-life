@@ -66,7 +66,6 @@ void game_input(void)
 
 void game_update(void)
 {
-    // TODO: Implement game update
     grid_step(grid);
 }
 
