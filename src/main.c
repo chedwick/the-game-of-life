@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
     while (game.running)
     {
         game_input();
-    //     if (game.update)
-    //         game_update();
+        if (game.update)
+            game_update();
     //     if (game.output)
     //         game_output();
     }

@@ -4,7 +4,7 @@
 .PHONY: all clean debug help ncurses sdl2 sdl3 sfml raylib
 
 # Default target is ncurses
-all: ncurses
+all: help
 
 help:
 	@echo "The Game of Life - Build System"
@@ -12,9 +12,9 @@ help:
 	@echo "Available targets:"
 	@echo "  make ncurses  Build with ncurses (default)"
 	@echo "  make sdl2     Build with SDL2"
-	@echo "  make sdl*     Build with SDL3"
-	@echo "  make sfml*     Build with SFML"
-	@echo "  make raylib*   Build with Raylib"
+	@echo "  make sdl3*    Build with SDL3"
+	@echo "  make sfml*    Build with SFML"
+	@echo "  make raylib*  Build with Raylib"
 	@echo "  make clean    Clean all build artifacts"
 	@echo "  make debug    Show build configuration"
 	@echo "  make help     Show this message"
