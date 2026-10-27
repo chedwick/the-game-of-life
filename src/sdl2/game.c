@@ -18,6 +18,7 @@ game_s game = {
     .renderer = NULL,
 };
 
+static void draw_cell(int x, int y, int alive, void *userdata);
 void game_initialization(void)
 {
     SDL_Window *window = sdl_window_create(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -61,6 +62,7 @@ void game_input(void)
 void game_update(void)
 {
     // TODO: Implement game update
+    grid_step(grid);
 }
 
 void game_output(void)
@@ -72,6 +74,8 @@ void game_output(void)
     // What does it do?!
     SDL_RenderClear(game.renderer);
     /// ^^^
+
+    grid_draw(grid, draw_cell, NULL);
 
     // Update screen
     SDL_RenderPresent(game.renderer);
@@ -94,3 +98,14 @@ void game_output(void)
 //     }
 //     return 0;
 // }
+
+static void draw_cell(int x, int y, int alive, void *userdata)
+{
+    (void) userdata;
+    SDL_Rect rect = { x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
+    if (alive)
+    {
+        SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
+        SDL_RenderFillRect(game.renderer, &rect);
+    }
+}

@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
         game_input();
         if (game.update)
             game_update();
-    //     if (game.output)
-    //         game_output();
+        if (game.output)
+            game_output();
     }
 
     game_finalization();
