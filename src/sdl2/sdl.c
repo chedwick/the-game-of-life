@@ -13,7 +13,7 @@ int sdl_initialization(void)
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, NEAREST_PIXEL_SAMPLING);
     
     // Initialize SDL2 with hint to disable high-DPI scaling
-    SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, DISABLE_HIGH_DPI_SCALING); 
+    SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, DISABLE_HIGH_DPI_SCALING);
 
     // Initialize SDL and SDL_image
     int sdl_flags = SDL_INIT_EVERYTHING | SDL_INIT_GAMECONTROLLER;
@@ -56,16 +56,17 @@ int sdl_finalization(void)
 SDL_Window* sdl_window_create(char* window_title,
                                      uint16_t height, uint16_t width)
 {
-   SDL_Window *window = SDL_CreateWindow(window_title,
-                                         SDL_WINDOWPOS_CENTERED,
-                                         SDL_WINDOWPOS_CENTERED,
-                                         width, height,
-                                         SDL_WINDOW_SHOWN);
-   if (!window)
-   {
-       printf("Window creation failed: %s\n", SDL_GetError());
-       return NULL;
-   }
+    SDL_Window *window = SDL_CreateWindow(window_title,
+                                          SDL_WINDOWPOS_CENTERED,
+                                          SDL_WINDOWPOS_CENTERED,
+                                          width, height,
+                                          SDL_WINDOW_SHOWN |
+                                          SDL_WINDOW_ALLOW_HIGHDPI);
+    if (!window)
+    {
+        printf("Window creation failed: %s\n", SDL_GetError());
+        return NULL;
+    }
 
    return window;
 }

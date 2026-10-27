@@ -19,8 +19,11 @@ game_s game = {
 };
 
 static void draw_cell(int x, int y, int alive, void *userdata);
+
 void game_initialization(void)
 {
+    sdl_initialization();
+
     SDL_Window *window = sdl_window_create(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT);
     if (!window)
         return;
@@ -37,7 +40,7 @@ void game_initialization(void)
 
     srand((unsigned) time(NULL));
 
-    grid = grid_create(GRID_WIDTH, GRID_HEIGHT);
+    grid = grid_create(GRID_COLS, GRID_ROWS);
     if (!grid)
         return;
 
@@ -51,6 +54,8 @@ void game_finalization(void)
 
     sdl_renderer_destroy(game.renderer);
     game.renderer = NULL;
+
+    sdl_finalization();
 }
 
 void game_input(void)
