@@ -23,10 +23,12 @@
 
 
 // Temporary to make it compatible with NCURSES
-#define KEY_DOWN	0402		/* down-arrow key */
-#define KEY_UP		0403		/* up-arrow key */
-#define KEY_LEFT	0404		/* left-arrow key */
-#define KEY_RIGHT	0405		/* right-arrow key */
+#define KEY_DOWN    402    // down-arrow key
+#define KEY_UP      403    // up-arrow key
+#define KEY_LEFT    404    // left-arrow key
+#define KEY_RIGHT   405    // right-arrow key
+#define KEY_SPACE   32     // space key
+#define KEY_NONE    0      // no key pressed
 
 // Font sizes
 #define FONT_SIZE_SCORE 24
@@ -45,16 +47,19 @@ typedef struct Game {
     mode_e mode;
     bool update;
     bool output;
+    int cursor_row;
+    int cursor_col;
 } game_s;
  
 extern game_s game;
 
-void game_initialization(void);
-void game_finalization(void);
+void initialization(void);
+void input(void);
+void update(void);
+void output(void);
+void pacing(void);
+void finalization(void);
 
-void game_input(void);
-void game_update(void);
-void game_output(void);
 
-void game_pool_events(void);
-void game_output_score(void);
+void pool_events(void);
+void output_score(void);

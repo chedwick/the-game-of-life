@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
-void game_pool_events(void)
+void pool_events(void)
 {
     // Poll events
     while (SDL_PollEvent(&game.event))
@@ -21,13 +21,9 @@ void game_pool_events(void)
                 {
                     case SDLK_ESCAPE:
                         if (game.mode == GAME_MODE_RUNNING)
-                        {
                             game.mode = GAME_MODE_STOPPED;
-                        }
                         else
-                        {
                             game.mode = GAME_MODE_RUNNING;
-                        }
                         break;
                     case SDLK_UP:
                         game.key = KEY_UP;
@@ -42,12 +38,17 @@ void game_pool_events(void)
                         game.key = KEY_RIGHT;
                         break;
                     case SDLK_SPACE:
+                        game.key = KEY_SPACE;
                         break;
                     case SDLK_RETURN:
-                        game.mode = GAME_MODE_EDITING;
+                        if (game.mode == GAME_MODE_RUNNING)
+                            game.mode = GAME_MODE_EDITING;
+                        else
+                            game.mode = GAME_MODE_RUNNING;
                         break;
                     default:
                         // No default case
+                        break;
                 }
                 break;
                 // Key released
@@ -69,6 +70,7 @@ void game_pool_events(void)
                     // ... handle other buttons (X, Y, B, etc.)
                     default:
                         // No default case
+                        break;
                 }
             } 
         }

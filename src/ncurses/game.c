@@ -21,13 +21,13 @@ static bool paused;
 
 game_s game;
 
-static void draw_cell(int x, int y, int alive, void *userdata)
+static void render_cell(int x, int y, int alive, void *userdata)
 {
     (void) userdata;
     ncurses_draw_cell(x, y, alive);
 }
 
-void game_initialization(void)
+void initialization(void)
 {
     if (ncurses_initialization() != 0)
         return;
@@ -62,14 +62,14 @@ void game_initialization(void)
     game.mode = GAME_MODE_RUNNING;
 }
 
-void game_finalization(void)
+void finalization(void)
 {
     grid_destroy(grid);
     grid = NULL;
     ncurses_finalization();
 }
 
-void game_input(void)
+void input(void)
 {
     input_t key = ncurses_poll_input(paused ? -1 : delay_ms);
 
@@ -129,18 +129,18 @@ void game_input(void)
     }
 }
 
-void game_update(void)
+void update(void)
 {
     grid_step(grid);
     generation++;
 }
 
-void game_output(void)
+void output(void)
 {
     if (!grid)
         return;
 
-    grid_draw(grid, draw_cell, NULL);
+    grid_draw(grid, render_cell, NULL);
     if (paused)
         ncurses_draw_cursor(cx, cy);
     ncurses_draw_status(grid->height, generation, paused, delay_ms);

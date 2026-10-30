@@ -16,17 +16,18 @@
 
 int main(int argc, char *argv[])
 {
-    game_initialization();
+    initialization();
 
     while (game.mode)
     {
-        game_input();
+        input();
         if (game.update)
-            game_update();
+            update();
         if (game.output)
-            game_output();
+            output();
+        pacing();
     }
 
-    game_finalization();
+    finalization();
     return EXIT_SUCCESS;
 }
