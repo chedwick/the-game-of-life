@@ -1,15 +1,19 @@
 #include "game.h"
-#include "sdl.h"
-
-#include "../gol.h"
 
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
 
+#include "output.h"
+#include "sdl.h"
+
+#include "../gol.h"
+
 static grid_s *grid;
 
 game_s game = {
+    .cursor_row = 0,
+    .cursor_col = 0,
     .mode = GAME_MODE_STOPPED,
     .update = false,
     .output = false,
@@ -22,9 +26,7 @@ static Uint64 frequency;
 static double target_frame_time;
 static Uint64 frame_start;
 
-static void draw_cell(int x, int y, int alive, void *userdata);
-
-void game_initialization(void)
+void initialization(void)
 {
     sdl_initialization();
 
@@ -54,7 +56,7 @@ void game_initialization(void)
     grid_randomize(grid, ALIVE_PERCENT);
 }
 
-void game_finalization(void)
+void finalization(void)
 {
     grid_destroy(grid);
     grid = NULL;
@@ -68,13 +70,13 @@ void game_finalization(void)
     sdl_finalization();
 }
 
-void game_input(void)
+void input(void)
 {
     frame_start = SDL_GetPerformanceCounter();
-    game_pool_events();
+    pool_events();
 }
 
-void game_update(void)
+void update(void)
 {
     switch (game.mode)
     {
@@ -83,22 +85,47 @@ void game_update(void)
             grid_step(grid);
             break;
         }
+        case GAME_MODE_EDITING:
+        {
+            if (game.key == KEY_UP)
+            {
+                game.cursor_row--;
+                if (game.cursor_row < 0)
+                    game.cursor_row = GRID_ROWS - 1;
+            }
+            else if (game.key == KEY_DOWN)
+            {
+                game.cursor_row++;
+                if (game.cursor_row >= GRID_ROWS)
+                    game.cursor_row = 0;
+            }
+            else if (game.key == KEY_LEFT)
+            {
+                game.cursor_col--;
+                if (game.cursor_col < 0)
+                    game.cursor_col = GRID_COLS - 1;
+            }
+            else if (game.key == KEY_RIGHT)
+            {
+                game.cursor_col++;
+                if (game.cursor_col >= GRID_COLS)
+                    game.cursor_col = 0;
+            }
+
+            game.key = KEY_NONE;
+            break;
+        }
         case GAME_MODE_PAUSED:
-        {
-            break;
-        }
-        
+            break;        
         case GAME_MODE_STOPPED:
-        {
             break;
-        }
         default:
             // No default case
             break;
     }
 }
 
-void game_output(void)
+void output(void)
 {
     // Clear screen
     SDL_SetRenderDrawColor(game.renderer, 63, 63, 116, 255);
@@ -106,12 +133,19 @@ void game_output(void)
     SDL_RenderClear(game.renderer);
     /// ^^^
 
-    grid_draw(grid, draw_cell, NULL);
+    grid_draw(grid, render_cell, NULL);
+    if (game.mode == GAME_MODE_EDITING)
+    {
+        render_cursor(game.cursor_col, game.cursor_row);
+    }
 
     // Update screen
     SDL_RenderPresent(game.renderer);
+}
 
-    // For FPS capping.
+// For FPS capping.
+void pacing(void)
+{
     Uint64 frame_end = SDL_GetPerformanceCounter();
     double elapsed = (double) (frame_end - frame_start) / frequency;
 
@@ -121,7 +155,6 @@ void game_output(void)
         SDL_Delay((Uint32) (remaining * 1000.0));
     }
 }
-
 
 // int initialize_fonts(void)
 // {
@@ -136,19 +169,3 @@ void game_output(void)
 //     }
 //     return 0;
 // }
-
-static void draw_cell(int x, int y, int alive, void *userdata)
-{
-    (void) userdata;
-    SDL_Rect rect = {
-        x * TILE_WIDTH,
-        y * TILE_HEIGHT,
-        TILE_WIDTH,
-        TILE_HEIGHT
-    };
-    if (alive)
-    {
-        SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(game.renderer, &rect);
-    }
-}

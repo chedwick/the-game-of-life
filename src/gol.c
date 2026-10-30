@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Row-major order
 #define CELL(b, x, y) ((b)->current[(y) * (b)->width + (x)])
 
 /*
@@ -84,7 +85,6 @@ static int count_neighbors(const grid_s *g, int x, int y)
 {
     int n = 0;
     for (int dy = -1; dy <= 1; dy++)
-    {
         for (int dx = -1; dx <= 1; dx++)
         {
             if (dx == 0 && dy == 0) continue;
@@ -92,7 +92,6 @@ static int count_neighbors(const grid_s *g, int x, int y)
             int ny = (y + dy + g->height) % g->height;
             n += CELL(g, nx, ny);
         }
-    }
     return n;
 }
 
@@ -101,17 +100,15 @@ void grid_step(grid_s *g)
     unsigned char *next = g->next;
 
     for (int y = 0; y < g->height; y++)
-    {
         for (int x = 0; x < g->width; x++)
         {
-            int n = count_neighbors(g, x, y);
+            int n = count_neighbors(g, y, x);
             if (CELL(g, x, y)) {
                 next[y * g->width + x] = (n == 2 || n == 3);
             } else {
                 next[y * g->width + x] = (n == 3);
             }
         }
-    }
 
     g->next = g->current;
     g->current = next;
@@ -121,10 +118,8 @@ void grid_draw(const grid_s *g, render_callback_t cb, void *userdata)
 {
     if (!cb) return;
     for (int y = 0; y < g->height; y++)
-    {
         for (int x = 0; x < g->width; x++)
         {
             cb(x, y, CELL(g, x, y), userdata);
         }
-    }
 }
