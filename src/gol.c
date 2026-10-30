@@ -5,7 +5,7 @@
 #include <string.h>
 
 // Row-major order
-#define CELL(b, x, y) ((b)->current[(y) * (b)->width + (x)])
+#define CELL(b, col, row) ((b)->current[(row) * (b)->width + (col)])
 
 /*
 The universe **wraps** (it's a torus), so corner cells have 8 neighbors, not 3.
@@ -13,14 +13,14 @@ The universe **wraps** (it's a torus), so corner cells have 8 neighbors, not 3.
 This happens in `count_neighbors`:
 
 ```c
-int nx = (x + dx + g->width) % g->width;
-int ny = (y + dy + g->height) % g->height;
+int nx = (col + dx + g->width) % g->width;
+int ny = (row + dy + g->height) % g->height;
 ```
 
 Adding `g->width` / `g->height` before the modulo keeps the value non-negative when `x + dx` is `-1`, because C's `%` can return negative results. So:
 
-- For the cell at (0, 0), the neighbor at `dx = -1` maps to `x = width - 1`, the right edge.
-- The neighbor at `dy = -1` maps to `y = height - 1`, the bottom edge.
+- For the cell at (0, 0), the neighbor at `dx = -1` maps to `col = width - 1`, the right edge.
+- The neighbor at `dy = -1` maps to `row = height - 1`, the bottom edge.
 - The diagonal neighbor of the top-left corner is the bottom-right corner cell.
 
 Every cell, including edges and corners, therefore checks all 8 surrounding positions.
@@ -28,19 +28,19 @@ Every cell, including edges and corners, therefore checks all 8 surrounding posi
 If you want a hard-edged universe instead (corners with 3 neighbors, edges with 5), replace those two lines with a bounds check that skips out-of-range positions:
 
 ```c
-int nx = x + dx, ny = y + dy;
+int nx = col + dx, ny = row + dy;
 if (nx < 0 || nx >= g->width || ny < 0 || ny >= g->height) continue;
 ```
 
 One edge case with wrapping: if the width or height is 1 or 2, a cell can count the same neighbor more than once, or count itself. That doesn't matter for normal board sizes.
 */
-grid_s *grid_create(int width, int height)
+grid_s *grid_create(int col, int row)
 {
     grid_s *g = malloc(sizeof *g);
     if (!g) return NULL;
-    g->width = width;
-    g->height = height;
-    size_t size = (size_t) width * height;
+    g->width = col;
+    g->height = row;
+    size_t size = (size_t) col * row;
     // one allocation holds both buffers: buffer0 in the first half,
     // buffer1 in the second half.
     g->buffer0 = calloc(size * 2, 1);
@@ -99,14 +99,14 @@ void grid_step(grid_s *g)
 {
     unsigned char *next = g->next;
 
-    for (int y = 0; y < g->height; y++)
-        for (int x = 0; x < g->width; x++)
+    for (int row = 0; row < g->height; row++)
+        for (int col = 0; col < g->width; col++)
         {
-            int n = count_neighbors(g, y, x);
-            if (CELL(g, x, y)) {
-                next[y * g->width + x] = (n == 2 || n == 3);
+            int n = count_neighbors(g, col, row);
+            if (CELL(g, col, row)) {
+                next[row * g->width + col] = (n == 2 || n == 3);
             } else {
-                next[y * g->width + x] = (n == 3);
+                next[row * g->width + col] = (n == 3);
             }
         }
 
@@ -114,12 +114,12 @@ void grid_step(grid_s *g)
     g->current = next;
 }
 
-void grid_draw(const grid_s *g, render_callback_t cb, void *userdata)
+void grid_draw(const grid_s *g, render_callback_t render, void *data)
 {
-    if (!cb) return;
-    for (int y = 0; y < g->height; y++)
-        for (int x = 0; x < g->width; x++)
+    if (!render) return;
+    for (int row = 0; row < g->height; row++)
+        for (int col = 0; col < g->width; col++)
         {
-            cb(x, y, CELL(g, x, y), userdata);
+            render(col, row, CELL(g, col, row), data);
         }
 }

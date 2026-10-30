@@ -27,6 +27,7 @@
 #define KEY_UP      403    // up-arrow key
 #define KEY_LEFT    404    // left-arrow key
 #define KEY_RIGHT   405    // right-arrow key
+#define KEY_SPACE   32     // space key
 #define KEY_NONE    0      // no key pressed
 
 // Font sizes

@@ -87,6 +87,10 @@ void update(void)
         }
         case GAME_MODE_EDITING:
         {
+            if (game.key == KEY_SPACE)
+            {
+                toggle_cell(grid, game.cursor_col, game.cursor_row);
+            }
             if (game.key == KEY_UP)
             {
                 game.cursor_row--;

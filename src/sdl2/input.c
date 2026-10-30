@@ -38,6 +38,7 @@ void pool_events(void)
                         game.key = KEY_RIGHT;
                         break;
                     case SDLK_SPACE:
+                        game.key = KEY_SPACE;
                         break;
                     case SDLK_RETURN:
                         if (game.mode == GAME_MODE_RUNNING)
