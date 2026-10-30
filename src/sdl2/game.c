@@ -1,7 +1,6 @@
 #include "game.h"
 #include "sdl.h"
 
-
 #include "../gol.h"
 
 #include <stdbool.h>
@@ -15,8 +14,13 @@ game_s game = {
     .update = false,
     .output = false,
     .window = NULL,
-    .renderer = NULL,
+    .renderer = NULL
 };
+
+
+static Uint64 frequency;
+static double targetFrameTime;
+static Uint64 frameStart;
 
 static void draw_cell(int x, int y, int alive, void *userdata);
 
@@ -24,7 +28,7 @@ void game_initialization(void)
 {
     sdl_initialization();
 
-    SDL_Window *window = sdl_window_create(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT);
+    SDL_Window *window = sdl_window_create(TITLE, WINDOW_HEIGHT, WINDOW_WIDTH);
     if (!window)
         return;
     game.window = window;   
@@ -37,6 +41,9 @@ void game_initialization(void)
     game.running = true;
     game.update = true;
     game.output = true;
+
+    frequency = SDL_GetPerformanceFrequency();
+    targetFrameTime = 1.0 / FRAME_RATE;
 
     srand((unsigned) time(NULL));
 
@@ -60,6 +67,7 @@ void game_finalization(void)
 
 void game_input(void)
 {
+    frameStart = SDL_GetPerformanceCounter();
     game_tick();
     game_pool_events();
 }
@@ -71,9 +79,7 @@ void game_update(void)
 
 void game_output(void)
 {
-    Uint32 tick = SDL_GetTicks();
-    // SDL: Clear screen
-    // Not necessary because tiles blit the whole screen.
+    // Clear screen
     SDL_SetRenderDrawColor(game.renderer, 63, 63, 116, 255);
     // What does it do?!
     SDL_RenderClear(game.renderer);
@@ -84,8 +90,14 @@ void game_output(void)
     // Update screen
     SDL_RenderPresent(game.renderer);
 
-    // Consume the output tick event.
-    // game.output = false;
+    // For FPS capping.
+    Uint64 frameEnd = SDL_GetPerformanceCounter();
+    double elapsed = (double)(frameEnd - frameStart) / frequency;
+
+    if (elapsed < targetFrameTime) {
+        double remaining = targetFrameTime - elapsed;
+        SDL_Delay((Uint32) (remaining * 1000.0));
+    }
 }
 
 

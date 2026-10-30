@@ -6,19 +6,19 @@
 // Game labels
 #define TITLE "THE GAME OF LIFE"
 
-#define TILE_HEIGHT 8
-#define TILE_WIDTH 8
+#define TILE_HEIGHT 12
+#define TILE_WIDTH 12
 #define ZOOM 1
 
-#define GRID_ROWS 220
-#define GRID_COLS 220
+#define GRID_ROWS 90
+#define GRID_COLS 160
 #define GRID_HEIGHT (TILE_HEIGHT * GRID_ROWS)
 #define GRID_WIDTH (TILE_WIDTH * GRID_COLS)
 #define WINDOW_HEIGHT (GRID_HEIGHT * ZOOM)
 #define WINDOW_WIDTH (GRID_WIDTH * ZOOM)
 
 #define SPEED 200
-#define FRAME_RATE 100
+#define FRAME_RATE 10
 
 
 // Temporary to make it compatible with NCURSES
