@@ -52,6 +52,7 @@ typedef struct Game {
 } game_s;
  
 extern game_s game;
+extern grid_s *grid;
 
 void initialization(void);
 void input(void);
