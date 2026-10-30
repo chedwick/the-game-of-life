@@ -1,4 +1,6 @@
+#include "output.h"
 #include "game.h"
+
 #include <SDL2/SDL.h>
 // #include "gfx/gfx_font.h"
 

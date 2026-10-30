@@ -1,18 +1,18 @@
 #include "update.h"
-#include "game.h"
 
 #include "../gol.h"
+#include "game.h"
 
 void update_running(void)
 {
-    grid_step(grid);
+    grid_step(game.grid);
 }
 
 void update_editing(void)
 {
     if (game.key == KEY_SPACE)
     {
-        toggle_cell(grid, game.cursor_col, game.cursor_row);
+        toggle_cell(game.grid, game.cursor_col, game.cursor_row);
     }
     if (game.key == KEY_UP)
     {
@@ -44,10 +44,10 @@ void update_editing(void)
 
 void update_paused(void)
 {
-
+    // No logic for paused mode
 }
 
 void update_stopped(void)
 {
-
+    // No logic for stopped mode
 }

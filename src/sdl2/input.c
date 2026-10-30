@@ -1,21 +1,18 @@
-#include "game.h"
-#include "sdl_controller.h"
+#include "input.h"
 
-#include <stdbool.h>
 #include <SDL2/SDL.h>
+#include "game.h"
 
-void pool_events(void)
+
+void read_input_devices(void)
 {
-    // Poll events
     while (SDL_PollEvent(&game.event))
     {
-        handle_controller_events(&game.event);
         switch (game.event.type)
         {
             case SDL_QUIT:
                 game.mode = GAME_MODE_STOPPED;
                 break;
-                // Key pressed
             case SDL_KEYDOWN:
                 switch (game.event.key.keysym.sym)
                 {
@@ -51,28 +48,11 @@ void pool_events(void)
                         break;
                 }
                 break;
-                // Key released
             case SDL_KEYUP:
                 break;
-            case SDL_CONTROLLERBUTTONDOWN:
-            {
-                game.key = KEY_UP;
-                // Handle button presses
-                switch (game.event.cbutton.button)
-                {
-                    case SDL_CONTROLLER_BUTTON_A:
-                        game.key = KEY_UP;
-                        printf("A button pressed\n");
-                        break;
-                    case SDL_CONTROLLER_BUTTON_START:
-                        printf("Start button pressed\n");
-                        break;
-                    // ... handle other buttons (X, Y, B, etc.)
-                    default:
-                        // No default case
-                        break;
-                }
-            } 
+            default:
+                // No default case
+                break;
         }
     }
 }
