@@ -4,7 +4,7 @@
 
 #include <stdbool.h>
 
-typedef struct {
+typedef struct Game {
     mode_e mode;
     bool update;
     bool output;
@@ -16,4 +16,5 @@ void initialization(void);
 void input(void);
 void update(void);
 void output(void);
+void pacing(void);
 void finalization(void);
