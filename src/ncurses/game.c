@@ -7,8 +7,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define GRID_COLS 80
-#define GRID_ROWS 80
 #define ALIVE_PERCENT 25
 #define INITIAL_DELAY_MS 100
 #define MIN_DELAY_MS 10
@@ -39,7 +37,7 @@ void game_initialization(void)
     int width;
     int height;
 
-    game.running = false;
+    game.mode = GAME_MODE_STOPPED;
     game.update = false;
     game.output = true;
 
@@ -61,8 +59,7 @@ void game_initialization(void)
     paused = true;
     cx = grid->width / 2;
     cy = grid->height / 2;
-    game.running = true;
-    game_output();
+    game.mode = GAME_MODE_RUNNING;
 }
 
 void game_finalization(void)
@@ -79,7 +76,7 @@ void game_input(void)
     game.update = false;
     switch (key) {
         case INPUT_QUIT:
-            game.running = false;
+            game.mode = GAME_MODE_STOPPED;
             game.output = false;
             break;
         case INPUT_PAUSE:
