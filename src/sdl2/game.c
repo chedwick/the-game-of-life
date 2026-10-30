@@ -94,6 +94,7 @@ void game_update(void)
         }
         default:
             // No default case
+            break;
     }
 }
 

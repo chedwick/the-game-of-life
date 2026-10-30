@@ -48,6 +48,7 @@ void game_pool_events(void)
                         break;
                     default:
                         // No default case
+                        break;
                 }
                 break;
                 // Key released
@@ -69,6 +70,7 @@ void game_pool_events(void)
                     // ... handle other buttons (X, Y, B, etc.)
                     default:
                         // No default case
+                        break;
                 }
             } 
         }
