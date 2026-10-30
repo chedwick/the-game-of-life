@@ -40,13 +40,11 @@ typedef struct Game {
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Event event;
-    time_t tick;
-    time_t state_update_tick;
-    time_t state_output_tick;
-    int key;
+
+    grid_s *grid;
     mode_e mode;
-    bool update;
-    bool output;
+    
+    int key;
     int cursor_row;
     int cursor_col;
 } game_s;
@@ -59,7 +57,3 @@ void update(void);
 void output(void);
 void pacing(void);
 void finalization(void);
-
-
-void pool_events(void);
-void output_score(void);

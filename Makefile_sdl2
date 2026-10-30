@@ -9,12 +9,10 @@ BUILD_DIR = build
 TARGET = $(BUILD_DIR)/gol
 
 SDL2_SOURCES = sdl2/sdl.c \
-	sdl2/game.c \
-	sdl2/sdl_controller.c \
-	sdl2/input.c \
-	sdl2/output.c
-#	sdl2/game_output.c
-# 	sdl2/game_output.c
+			   sdl2/game.c \
+			   sdl2/input.c \
+			   sdl2/update.c \
+			   sdl2/output.c
 SOURCES = $(addprefix $(SRC_DIR)/,main.c gol.c $(SDL2_SOURCES))
 OBJECTS = $(SOURCES:.c=.o)
 

@@ -21,10 +21,8 @@ int main(int argc, char *argv[])
     while (game.mode)
     {
         input();
-        if (game.update)
-            update();
-        if (game.output)
-            output();
+        update();
+        output();
         pacing();
     }
 

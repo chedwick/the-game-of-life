@@ -146,3 +146,8 @@ void output(void)
     ncurses_draw_status(grid->height, generation, paused, delay_ms);
     ncurses_present();
 }
+
+void pacing(void)
+{
+    // No logic for pacing
+}
