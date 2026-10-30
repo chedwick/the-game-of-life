@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../gol.h"
+
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
@@ -10,10 +12,9 @@
 #define TILE_WIDTH 12
 #define ZOOM 1
 
-#define GRID_ROWS 90
-#define GRID_COLS 160
 #define GRID_HEIGHT (TILE_HEIGHT * GRID_ROWS)
 #define GRID_WIDTH (TILE_WIDTH * GRID_COLS)
+
 #define WINDOW_HEIGHT (GRID_HEIGHT * ZOOM)
 #define WINDOW_WIDTH (GRID_WIDTH * ZOOM)
 
@@ -41,8 +42,7 @@ typedef struct Game {
     time_t state_update_tick;
     time_t state_output_tick;
     int key;
-    bool pause;
-    bool running;
+    mode_e mode;
     bool update;
     bool output;
 } game_s;
@@ -56,6 +56,5 @@ void game_input(void);
 void game_update(void);
 void game_output(void);
 
-void game_tick(void);
 void game_pool_events(void);
 void game_output_score(void);

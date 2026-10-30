@@ -1,5 +1,15 @@
 #pragma once
 
+#define GRID_ROWS 90
+#define GRID_COLS 160
+
+typedef enum mode_e {
+    GAME_MODE_STOPPED,
+    GAME_MODE_RUNNING,
+    GAME_MODE_PAUSED,
+    GAME_MODE_EDITING
+} mode_e;
+
 typedef struct Grid {
     int width;
     int height;

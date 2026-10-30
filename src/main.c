@@ -2,10 +2,10 @@
 
 #if defined(SDL2)
 #include "sdl2/game.h"
-#elif defined(SFML)
-#include "sfml/game.h"
 #elif defined(SDL3)
 #include "sdl3/game.h"
+#elif defined(SFML)
+#include "sfml/game.h"
 #elif defined(RAYLIB)
 #include "raylib/game.h"
 #elif defined(NCURSES)
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 {
     game_initialization();
 
-    while (game.running)
+    while (game.mode)
     {
         game_input();
         if (game.update)
