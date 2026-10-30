@@ -1,24 +1,25 @@
 #pragma once
 
+#include "../gol.h"
+
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
 // Game labels
 #define TITLE "THE GAME OF LIFE"
 
-#define TILE_HEIGHT 8
-#define TILE_WIDTH 8
+#define TILE_HEIGHT 12
+#define TILE_WIDTH 12
 #define ZOOM 1
 
-#define GRID_ROWS 220
-#define GRID_COLS 220
 #define GRID_HEIGHT (TILE_HEIGHT * GRID_ROWS)
 #define GRID_WIDTH (TILE_WIDTH * GRID_COLS)
+
 #define WINDOW_HEIGHT (GRID_HEIGHT * ZOOM)
 #define WINDOW_WIDTH (GRID_WIDTH * ZOOM)
 
 #define SPEED 200
-#define FRAME_RATE 100
+#define FRAME_RATE 10
 
 
 // Temporary to make it compatible with NCURSES
@@ -41,8 +42,7 @@ typedef struct Game {
     time_t state_update_tick;
     time_t state_output_tick;
     int key;
-    bool pause;
-    bool running;
+    mode_e mode;
     bool update;
     bool output;
 } game_s;
@@ -56,6 +56,5 @@ void game_input(void);
 void game_update(void);
 void game_output(void);
 
-void game_tick(void);
 void game_pool_events(void);
 void game_output_score(void);

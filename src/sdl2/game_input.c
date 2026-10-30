@@ -4,22 +4,6 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
-void game_tick(void)
-{
-    // Ticks
-    game.tick = SDL_GetTicks();
-    if (game.tick - game.state_update_tick >= SPEED)
-    {
-        game.state_update_tick = game.tick;
-        game.update = true;
-    }
-    if (game.tick - game.state_output_tick >= FRAME_RATE)
-    {
-        game.state_output_tick = game.tick;
-        game.output = true;
-    }
-}
-
 void game_pool_events(void)
 {
     // Poll events
@@ -29,15 +13,21 @@ void game_pool_events(void)
         switch (game.event.type)
         {
             case SDL_QUIT:
-                game.running = false;
+                game.mode = GAME_MODE_STOPPED;
                 break;
                 // Key pressed
             case SDL_KEYDOWN:
                 switch (game.event.key.keysym.sym)
                 {
                     case SDLK_ESCAPE:
-                        // Exit on ESC
-                        game.running = false;
+                        if (game.mode == GAME_MODE_RUNNING)
+                        {
+                            game.mode = GAME_MODE_STOPPED;
+                        }
+                        else
+                        {
+                            game.mode = GAME_MODE_RUNNING;
+                        }
                         break;
                     case SDLK_UP:
                         game.key = KEY_UP;
@@ -52,7 +42,12 @@ void game_pool_events(void)
                         game.key = KEY_RIGHT;
                         break;
                     case SDLK_SPACE:
-                        game.pause = !game.pause;
+                        break;
+                    case SDLK_RETURN:
+                        game.mode = GAME_MODE_EDITING;
+                        break;
+                    default:
+                        // No default case
                 }
                 break;
                 // Key released
@@ -72,6 +67,8 @@ void game_pool_events(void)
                         printf("Start button pressed\n");
                         break;
                     // ... handle other buttons (X, Y, B, etc.)
+                    default:
+                        // No default case
                 }
             } 
         }

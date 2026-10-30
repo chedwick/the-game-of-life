@@ -1,7 +1,6 @@
 #include "game.h"
 #include "sdl.h"
 
-
 #include "../gol.h"
 
 #include <stdbool.h>
@@ -11,12 +10,17 @@
 static grid_s *grid;
 
 game_s game = {
-    .running = false,
+    .mode = GAME_MODE_STOPPED,
     .update = false,
     .output = false,
     .window = NULL,
-    .renderer = NULL,
+    .renderer = NULL
 };
+
+
+static Uint64 frequency;
+static double target_frame_time;
+static Uint64 frame_start;
 
 static void draw_cell(int x, int y, int alive, void *userdata);
 
@@ -24,7 +28,7 @@ void game_initialization(void)
 {
     sdl_initialization();
 
-    SDL_Window *window = sdl_window_create(TITLE, WINDOW_WIDTH, WINDOW_HEIGHT);
+    SDL_Window *window = sdl_window_create(TITLE, WINDOW_HEIGHT, WINDOW_WIDTH);
     if (!window)
         return;
     game.window = window;   
@@ -34,9 +38,12 @@ void game_initialization(void)
         return;
     game.renderer = renderer;   
 
-    game.running = true;
+    game.mode = GAME_MODE_RUNNING;
     game.update = true;
     game.output = true;
+
+    frequency = SDL_GetPerformanceFrequency();
+    target_frame_time = 1.0 / FRAME_RATE;
 
     srand((unsigned) time(NULL));
 
@@ -49,6 +56,9 @@ void game_initialization(void)
 
 void game_finalization(void)
 {
+    grid_destroy(grid);
+    grid = NULL;
+
     sdl_window_destroy(game.window);
     game.window = NULL;
 
@@ -60,21 +70,36 @@ void game_finalization(void)
 
 void game_input(void)
 {
-    game_tick();
+    frame_start = SDL_GetPerformanceCounter();
     game_pool_events();
 }
 
 void game_update(void)
 {
-    // TODO: Implement game update
-    grid_step(grid);
+    switch (game.mode)
+    {
+        case GAME_MODE_RUNNING:
+        {
+            grid_step(grid);
+            break;
+        }
+        case GAME_MODE_PAUSED:
+        {
+            break;
+        }
+        
+        case GAME_MODE_STOPPED:
+        {
+            break;
+        }
+        default:
+            // No default case
+    }
 }
 
 void game_output(void)
 {
-    Uint32 tick = SDL_GetTicks();
-    // SDL: Clear screen
-    // Not necessary because tiles blit the whole screen.
+    // Clear screen
     SDL_SetRenderDrawColor(game.renderer, 63, 63, 116, 255);
     // What does it do?!
     SDL_RenderClear(game.renderer);
@@ -85,8 +110,15 @@ void game_output(void)
     // Update screen
     SDL_RenderPresent(game.renderer);
 
-    // Consume the output tick event.
-    // game.output = false;
+    // For FPS capping.
+    Uint64 frame_end = SDL_GetPerformanceCounter();
+    double elapsed = (double) (frame_end - frame_start) / frequency;
+
+    if (elapsed < target_frame_time)
+    {
+        double remaining = target_frame_time - elapsed;
+        SDL_Delay((Uint32) (remaining * 1000.0));
+    }
 }
 
 
@@ -107,7 +139,12 @@ void game_output(void)
 static void draw_cell(int x, int y, int alive, void *userdata)
 {
     (void) userdata;
-    SDL_Rect rect = { x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
+    SDL_Rect rect = {
+        x * TILE_WIDTH,
+        y * TILE_HEIGHT,
+        TILE_WIDTH,
+        TILE_HEIGHT
+    };
     if (alive)
     {
         SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);

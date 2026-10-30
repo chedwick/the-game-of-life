@@ -1,9 +1,11 @@
 #pragma once
 
+#include "../gol.h"
+
 #include <stdbool.h>
 
 typedef struct {
-    bool running;
+    mode_e mode;
     bool update;
     bool output;
 } game_s;

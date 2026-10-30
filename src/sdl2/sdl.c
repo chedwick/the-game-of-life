@@ -9,22 +9,16 @@
 
 int sdl_initialization(void)
 {
-    // Optional Nearest-Neighbor Scaling: Use
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, NEAREST_PIXEL_SAMPLING);
-    
-    // Initialize SDL2 with hint to disable high-DPI scaling
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, NEAREST_PIXEL_SAMPLING);    
     SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, DISABLE_HIGH_DPI_SCALING);
 
-    // Initialize SDL and SDL_image
     int sdl_flags = SDL_INIT_EVERYTHING | SDL_INIT_GAMECONTROLLER;
-                    // | SDL_INIT_VIDEO*/
     if (SDL_Init(sdl_flags) < 0)
     {
         printf("SDL_Init failed: %s\n", SDL_GetError());
         return 1;
     }
 
-    // Initialize PNG loading
     int img_flags = IMG_INIT_PNG;
     if (!(IMG_Init(img_flags) & img_flags))
     {
@@ -53,22 +47,20 @@ int sdl_finalization(void)
     return 0;
 }
 
-SDL_Window* sdl_window_create(char* window_title,
-                                     uint16_t height, uint16_t width)
+SDL_Window* sdl_window_create(const char* title,
+                              uint16_t height, uint16_t width)
 {
-    SDL_Window *window = SDL_CreateWindow(window_title,
+    int window_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI;
+    SDL_Window *window = SDL_CreateWindow(title,
                                           SDL_WINDOWPOS_CENTERED,
                                           SDL_WINDOWPOS_CENTERED,
                                           width, height,
-                                          SDL_WINDOW_SHOWN |
-                                          SDL_WINDOW_ALLOW_HIGHDPI);
-    if (!window)
-    {
-        printf("Window creation failed: %s\n", SDL_GetError());
-        return NULL;
-    }
+                                          window_flags);
+    if (window)
+        return window;
 
-   return window;
+    printf("Window creation failed: %s\n", SDL_GetError());
+    return NULL;
 }
 
 void sdl_window_destroy(SDL_Window *window)
@@ -79,15 +71,13 @@ void sdl_window_destroy(SDL_Window *window)
 
 SDL_Renderer* sdl_renderer_create(SDL_Window* window)
 {
-   SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
-                                               SDL_RENDERER_ACCELERATED);
-   if (!renderer)
-   {
-       printf("Renderer creation failed: %s\n", SDL_GetError());
-       return NULL;
-   }
+    int renderer_flags = SDL_RENDERER_ACCELERATED;
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, renderer_flags);
+    if (renderer)
+        return renderer;
 
-   return renderer;
+    printf("Renderer creation failed: %s\n", SDL_GetError());
+    return NULL;
 }
 
 void sdl_renderer_destroy(SDL_Renderer *renderer)
