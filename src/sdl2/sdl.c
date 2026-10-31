@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_TTF.h>
+#include <SDL2/SDL_ttf.h>
 
 #define NEAREST_PIXEL_SAMPLING "0"
 #define DISABLE_HIGH_DPI_SCALING "1"

@@ -1,6 +1,7 @@
 #include "input.h"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_keycode.h>
 #include "game.h"
 
 
@@ -22,20 +23,32 @@ void read_input_devices(void)
                         else
                             game.mode = GOL_MODE_RUNNING;
                         break;
-                    case SDLK_UP:
-                        game.key = KEY_UP;
+                    case SDLK_c:
+                        game.key = GOL_INPUT_CLEAR;
                         break;
-                    case SDLK_DOWN:
-                        game.key = KEY_DOWN;
+                    case SDLK_r:
+                        game.key = GOL_INPUT_RANDOMIZE;
                         break;
-                    case SDLK_LEFT:
-                        game.key = KEY_LEFT;
+                    case SDLK_s:
+                        game.key = GOL_INPUT_STEP;
                         break;
-                    case SDLK_RIGHT:
-                        game.key = KEY_RIGHT;
+                    case SDLK_p:
+                        game.key = GOL_INPUT_PAUSE;
                         break;
                     case SDLK_SPACE:
-                        game.key = KEY_SPACE;
+                        game.key = GOL_INPUT_SPACE;
+                        break;
+                    case SDLK_UP:
+                        game.key = GOL_INPUT_UP;
+                        break;
+                    case SDLK_DOWN:
+                        game.key = GOL_INPUT_DOWN;
+                        break;
+                    case SDLK_LEFT:
+                        game.key = GOL_INPUT_LEFT;
+                        break;
+                    case SDLK_RIGHT:
+                        game.key = GOL_INPUT_RIGHT;
                         break;
                     case SDLK_RETURN:
                         if (game.mode == GOL_MODE_RUNNING)

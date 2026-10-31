@@ -1,7 +1,11 @@
 #pragma once
 
+// Grid dimensions
 #define GRID_ROWS 90
 #define GRID_COLS 160
+
+// Percentage of cells alive in the initial grid
+#define ALIVE_PERCENT 25
 
 typedef enum Mode {
     GOL_MODE_STOPPED,
@@ -24,7 +28,8 @@ typedef enum Input {
     GOL_INPUT_DOWN,
     GOL_INPUT_LEFT,
     GOL_INPUT_RIGHT,
-    GOL_INPUT_TOGGLE
+    GOL_INPUT_TOGGLE,
+    GOL_INPUT_SPACE
 } input_e;
 
 typedef struct Grid {

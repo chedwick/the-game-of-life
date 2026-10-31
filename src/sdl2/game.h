@@ -21,20 +21,10 @@
 #define SPEED 200
 #define FRAME_RATE 10
 
-
-// Temporary to make it compatible with NCURSES
-#define KEY_DOWN    402    // down-arrow key
-#define KEY_UP      403    // up-arrow key
-#define KEY_LEFT    404    // left-arrow key
-#define KEY_RIGHT   405    // right-arrow key
-#define KEY_SPACE   32     // space key
-#define KEY_NONE    0      // no key pressed
-
 // Font sizes
 #define FONT_SIZE_SCORE 24
 
-// The Game of Life
-#define ALIVE_PERCENT 25
+
 
 typedef struct Game {
     SDL_Window *window;
