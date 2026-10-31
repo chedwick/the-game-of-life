@@ -28,9 +28,9 @@ typedef enum Input {
 } input_e;
 
 typedef struct Grid {
-    int width;
-    int height;
-    // width * height, row-major, 1 = alive
+    // cols * rows, row-major
+    int cols;
+    int rows;
     unsigned char *buffer0;
     unsigned char *buffer1;
     unsigned char *current;

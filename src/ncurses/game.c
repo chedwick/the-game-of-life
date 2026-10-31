@@ -12,7 +12,7 @@
 #define MIN_DELAY_MS 10
 #define DELAY_STEP_MS 10
 
-static grid_s *grid;
+
 static int delay_ms;
 static int generation;
 static int cx;
@@ -49,29 +49,29 @@ void initialization(void)
     if (width < 1 || height < 2)
         return;
 
-    grid = grid_create(width, height - 1);
-    if (!grid)
+    game.grid = grid_create(width, height - 1);
+    if (!game.grid)
         return;
 
-    grid_randomize(grid, ALIVE_PERCENT);
+    grid_randomize(game.grid, ALIVE_PERCENT);
     delay_ms = INITIAL_DELAY_MS;
     generation = 0;
     paused = true;
-    cx = grid->width / 2;
-    cy = grid->height / 2;
+    cx = game.grid->cols / 2;
+    cy = game.grid->rows / 2;
     game.mode = GOL_MODE_RUNNING;
 }
 
 void finalization(void)
 {
-    grid_destroy(grid);
-    grid = NULL;
+    grid_destroy(game.grid);
+    game.grid = NULL;
     ncurses_finalization();
 }
 
 void input(void)
 {
-    input_t key = ncurses_poll_input(paused ? -1 : delay_ms);
+    input_e key = ncurses_poll_input(paused ? -1 : delay_ms);
 
     game.update = false;
     switch (key)
@@ -87,11 +87,11 @@ void input(void)
             game.update = true;
             break;
         case GOL_INPUT_RANDOMIZE:
-            grid_randomize(grid, ALIVE_PERCENT);
+            grid_randomize(game.grid, ALIVE_PERCENT);
             generation = 0;
             break;
         case GOL_INPUT_CLEAR:
-            grid_clear(grid);
+            grid_clear(game.grid);
             generation = 0;
             break;
         case GOL_INPUT_FASTER:
@@ -106,7 +106,7 @@ void input(void)
                 cy--;
             break;
         case GOL_INPUT_DOWN:
-            if (paused && cy < grid->height - 1)
+            if (paused && cy < game.grid->rows - 1)
                 cy++;
             break;
         case GOL_INPUT_LEFT:
@@ -114,12 +114,12 @@ void input(void)
                 cx--;
             break;
         case GOL_INPUT_RIGHT:
-            if (paused && cx < grid->width - 1)
+            if (paused && cx < game.grid->cols - 1)
                 cx++;
             break;
         case GOL_INPUT_TOGGLE:
             if (paused)
-                toggle_cell(grid, cx, cy);
+                toggle_cell(game.grid, cx, cy);
             break;
         case GOL_INPUT_TIMEOUT:
             if (!paused)
@@ -132,19 +132,19 @@ void input(void)
 
 void update(void)
 {
-    grid_step(grid);
+    grid_step(game.grid);
     generation++;
 }
 
 void output(void)
 {
-    if (!grid)
+    if (!game.grid)
         return;
 
-    grid_draw(grid, render_cell, NULL);
+    grid_draw(game.grid, render_cell, NULL);
     if (paused)
         ncurses_draw_cursor(cx, cy);
-    ncurses_draw_status(grid->height, generation, paused, delay_ms);
+    ncurses_draw_status(game.grid->rows, generation, paused, delay_ms);
     ncurses_present();
 }
 

@@ -57,38 +57,38 @@ void ncurses_present(void)
     refresh();
 }
 
-input_t ncurses_poll_input(int timeout_ms)
+input_e ncurses_poll_input(int timeout_ms)
 {
     timeout(timeout_ms);
     switch (getch()) {
         case 'q':
-            return INPUT_QUIT;
+            return GOL_INPUT_QUIT;
         case ' ':
-            return INPUT_PAUSE;
+            return GOL_INPUT_PAUSE;
         case 'n':
-            return INPUT_STEP;
+            return GOL_INPUT_STEP;
         case 'r':
-            return INPUT_RANDOMIZE;
+            return GOL_INPUT_RANDOMIZE;
         case 'c':
-            return INPUT_CLEAR;
+            return GOL_INPUT_CLEAR;
         case '+':
-            return INPUT_FASTER;
+            return GOL_INPUT_FASTER;
         case '-':
-            return INPUT_SLOWER;
+            return GOL_INPUT_SLOWER;
         case KEY_UP:
-            return INPUT_UP;
+            return GOL_INPUT_UP;
         case KEY_DOWN:
-            return INPUT_DOWN;
+            return GOL_INPUT_DOWN;
         case KEY_LEFT:
-            return INPUT_LEFT;
+            return GOL_INPUT_LEFT;
         case KEY_RIGHT:
-            return INPUT_RIGHT;
+            return GOL_INPUT_RIGHT;
         case '\n':
         case KEY_ENTER:
-            return INPUT_TOGGLE;
+            return GOL_INPUT_TOGGLE;
         case ERR:
-            return INPUT_TIMEOUT;
+            return GOL_INPUT_TIMEOUT;
         default:
-            return INPUT_NONE;
+            return GOL_INPUT_NONE;
     }
 }
