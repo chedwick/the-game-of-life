@@ -74,53 +74,54 @@ void input(void)
     input_t key = ncurses_poll_input(paused ? -1 : delay_ms);
 
     game.update = false;
-    switch (key) {
-        case INPUT_QUIT:
+    switch (key)
+    {
+        case GOL_INPUT_QUIT:
             game.mode = GOL_MODE_STOPPED;
             game.output = false;
             break;
-        case INPUT_PAUSE:
+        case GOL_INPUT_PAUSE:
             paused = !paused;
             break;
-        case INPUT_STEP:
+        case GOL_INPUT_STEP:
             game.update = true;
             break;
-        case INPUT_RANDOMIZE:
+        case GOL_INPUT_RANDOMIZE:
             grid_randomize(grid, ALIVE_PERCENT);
             generation = 0;
             break;
-        case INPUT_CLEAR:
+        case GOL_INPUT_CLEAR:
             grid_clear(grid);
             generation = 0;
             break;
-        case INPUT_FASTER:
+        case GOL_INPUT_FASTER:
             if (delay_ms > MIN_DELAY_MS)
                 delay_ms -= DELAY_STEP_MS;
             break;
-        case INPUT_SLOWER:
+        case GOL_INPUT_SLOWER:
             delay_ms += DELAY_STEP_MS;
             break;
-        case INPUT_UP:
+        case GOL_INPUT_UP:
             if (paused && cy > 0)
                 cy--;
             break;
-        case INPUT_DOWN:
+        case GOL_INPUT_DOWN:
             if (paused && cy < grid->height - 1)
                 cy++;
             break;
-        case INPUT_LEFT:
+        case GOL_INPUT_LEFT:
             if (paused && cx > 0)
                 cx--;
             break;
-        case INPUT_RIGHT:
+        case GOL_INPUT_RIGHT:
             if (paused && cx < grid->width - 1)
                 cx++;
             break;
-        case INPUT_TOGGLE:
+        case GOL_INPUT_TOGGLE:
             if (paused)
                 toggle_cell(grid, cx, cy);
             break;
-        case INPUT_TIMEOUT:
+        case GOL_INPUT_TIMEOUT:
             if (!paused)
                 game.update = true;
             break;

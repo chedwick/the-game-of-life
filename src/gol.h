@@ -8,7 +8,7 @@ typedef enum Mode {
     GOL_MODE_RUNNING,
     GOL_MODE_PAUSED,
     GOL_MODE_EDITING
-} mode_t;
+} mode_e;
 
 typedef enum Input {
     GOL_INPUT_NONE = 0,
@@ -25,7 +25,7 @@ typedef enum Input {
     GOL_INPUT_LEFT,
     GOL_INPUT_RIGHT,
     GOL_INPUT_TOGGLE
-} input_t;
+} input_e;
 
 typedef struct Grid {
     int width;
@@ -38,7 +38,7 @@ typedef struct Grid {
 
 } grid_s;
 
-grid_s* grid_create(int width, int height);
+grid_s* grid_create(int rows, int cols);
 void grid_destroy(grid_s *g);
 
 void grid_step(grid_s *g);
