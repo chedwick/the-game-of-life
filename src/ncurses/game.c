@@ -37,7 +37,7 @@ void initialization(void)
     int width;
     int height;
 
-    game.mode = GAME_MODE_STOPPED;
+    game.mode = GOL_MODE_STOPPED;
     game.update = false;
     game.output = true;
 
@@ -59,7 +59,7 @@ void initialization(void)
     paused = true;
     cx = grid->width / 2;
     cy = grid->height / 2;
-    game.mode = GAME_MODE_RUNNING;
+    game.mode = GOL_MODE_RUNNING;
 }
 
 void finalization(void)
@@ -76,7 +76,7 @@ void input(void)
     game.update = false;
     switch (key) {
         case INPUT_QUIT:
-            game.mode = GAME_MODE_STOPPED;
+            game.mode = GOL_MODE_STOPPED;
             game.output = false;
             break;
         case INPUT_PAUSE:

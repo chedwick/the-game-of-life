@@ -3,12 +3,29 @@
 #define GRID_ROWS 90
 #define GRID_COLS 160
 
-typedef enum mode_e {
-    GAME_MODE_STOPPED,
-    GAME_MODE_RUNNING,
-    GAME_MODE_PAUSED,
-    GAME_MODE_EDITING
-} mode_e;
+typedef enum Mode {
+    GOL_MODE_STOPPED,
+    GOL_MODE_RUNNING,
+    GOL_MODE_PAUSED,
+    GOL_MODE_EDITING
+} mode_t;
+
+typedef enum Input {
+    GOL_INPUT_NONE = 0,
+    GOL_INPUT_TIMEOUT,
+    GOL_INPUT_QUIT,
+    GOL_INPUT_PAUSE,
+    GOL_INPUT_STEP,
+    GOL_INPUT_RANDOMIZE,
+    GOL_INPUT_CLEAR,
+    GOL_INPUT_FASTER,
+    GOL_INPUT_SLOWER,
+    GOL_INPUT_UP,
+    GOL_INPUT_DOWN,
+    GOL_INPUT_LEFT,
+    GOL_INPUT_RIGHT,
+    GOL_INPUT_TOGGLE
+} input_t;
 
 typedef struct Grid {
     int width;

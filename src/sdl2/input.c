@@ -11,16 +11,16 @@ void read_input_devices(void)
         switch (game.event.type)
         {
             case SDL_QUIT:
-                game.mode = GAME_MODE_STOPPED;
+                game.mode = GOL_MODE_STOPPED;
                 break;
             case SDL_KEYDOWN:
                 switch (game.event.key.keysym.sym)
                 {
                     case SDLK_ESCAPE:
-                        if (game.mode == GAME_MODE_RUNNING)
-                            game.mode = GAME_MODE_STOPPED;
+                        if (game.mode == GOL_MODE_RUNNING)
+                            game.mode = GOL_MODE_STOPPED;
                         else
-                            game.mode = GAME_MODE_RUNNING;
+                            game.mode = GOL_MODE_RUNNING;
                         break;
                     case SDLK_UP:
                         game.key = KEY_UP;
@@ -38,10 +38,10 @@ void read_input_devices(void)
                         game.key = KEY_SPACE;
                         break;
                     case SDLK_RETURN:
-                        if (game.mode == GAME_MODE_RUNNING)
-                            game.mode = GAME_MODE_EDITING;
+                        if (game.mode == GOL_MODE_RUNNING)
+                            game.mode = GOL_MODE_EDITING;
                         else
-                            game.mode = GAME_MODE_RUNNING;
+                            game.mode = GOL_MODE_RUNNING;
                         break;
                     default:
                         // No default case
