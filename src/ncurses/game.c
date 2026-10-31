@@ -12,7 +12,7 @@
 #define MIN_DELAY_MS 10
 #define DELAY_STEP_MS 10
 
-static grid_s *grid;
+
 static int delay_ms;
 static int generation;
 static int cx;
@@ -37,7 +37,7 @@ void initialization(void)
     int width;
     int height;
 
-    game.mode = GAME_MODE_STOPPED;
+    game.mode = GOL_MODE_STOPPED;
     game.update = false;
     game.output = true;
 
@@ -49,78 +49,79 @@ void initialization(void)
     if (width < 1 || height < 2)
         return;
 
-    grid = grid_create(width, height - 1);
-    if (!grid)
+    game.grid = grid_create(width, height - 1);
+    if (!game.grid)
         return;
 
-    grid_randomize(grid, ALIVE_PERCENT);
+    grid_randomize(game.grid, ALIVE_PERCENT);
     delay_ms = INITIAL_DELAY_MS;
     generation = 0;
     paused = true;
-    cx = grid->width / 2;
-    cy = grid->height / 2;
-    game.mode = GAME_MODE_RUNNING;
+    cx = game.grid->cols / 2;
+    cy = game.grid->rows / 2;
+    game.mode = GOL_MODE_RUNNING;
 }
 
 void finalization(void)
 {
-    grid_destroy(grid);
-    grid = NULL;
+    grid_destroy(game.grid);
+    game.grid = NULL;
     ncurses_finalization();
 }
 
 void input(void)
 {
-    input_t key = ncurses_poll_input(paused ? -1 : delay_ms);
+    input_e key = ncurses_poll_input(paused ? -1 : delay_ms);
 
     game.update = false;
-    switch (key) {
-        case INPUT_QUIT:
-            game.mode = GAME_MODE_STOPPED;
+    switch (key)
+    {
+        case GOL_INPUT_QUIT:
+            game.mode = GOL_MODE_STOPPED;
             game.output = false;
             break;
-        case INPUT_PAUSE:
+        case GOL_INPUT_PAUSE:
             paused = !paused;
             break;
-        case INPUT_STEP:
+        case GOL_INPUT_STEP:
             game.update = true;
             break;
-        case INPUT_RANDOMIZE:
-            grid_randomize(grid, ALIVE_PERCENT);
+        case GOL_INPUT_RANDOMIZE:
+            grid_randomize(game.grid, ALIVE_PERCENT);
             generation = 0;
             break;
-        case INPUT_CLEAR:
-            grid_clear(grid);
+        case GOL_INPUT_CLEAR:
+            grid_clear(game.grid);
             generation = 0;
             break;
-        case INPUT_FASTER:
+        case GOL_INPUT_FASTER:
             if (delay_ms > MIN_DELAY_MS)
                 delay_ms -= DELAY_STEP_MS;
             break;
-        case INPUT_SLOWER:
+        case GOL_INPUT_SLOWER:
             delay_ms += DELAY_STEP_MS;
             break;
-        case INPUT_UP:
+        case GOL_INPUT_UP:
             if (paused && cy > 0)
                 cy--;
             break;
-        case INPUT_DOWN:
-            if (paused && cy < grid->height - 1)
+        case GOL_INPUT_DOWN:
+            if (paused && cy < game.grid->rows - 1)
                 cy++;
             break;
-        case INPUT_LEFT:
+        case GOL_INPUT_LEFT:
             if (paused && cx > 0)
                 cx--;
             break;
-        case INPUT_RIGHT:
-            if (paused && cx < grid->width - 1)
+        case GOL_INPUT_RIGHT:
+            if (paused && cx < game.grid->cols - 1)
                 cx++;
             break;
-        case INPUT_TOGGLE:
+        case GOL_INPUT_TOGGLE:
             if (paused)
-                toggle_cell(grid, cx, cy);
+                toggle_cell(game.grid, cx, cy);
             break;
-        case INPUT_TIMEOUT:
+        case GOL_INPUT_TIMEOUT:
             if (!paused)
                 game.update = true;
             break;
@@ -131,19 +132,19 @@ void input(void)
 
 void update(void)
 {
-    grid_step(grid);
+    grid_step(game.grid);
     generation++;
 }
 
 void output(void)
 {
-    if (!grid)
+    if (!game.grid)
         return;
 
-    grid_draw(grid, render_cell, NULL);
+    grid_draw(game.grid, render_cell, NULL);
     if (paused)
         ncurses_draw_cursor(cx, cy);
-    ncurses_draw_status(grid->height, generation, paused, delay_ms);
+    ncurses_draw_status(game.grid->rows, generation, paused, delay_ms);
     ncurses_present();
 }
 

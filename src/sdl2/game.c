@@ -15,7 +15,7 @@ game_s game = {
     .grid = NULL,
     .cursor_row = 0,
     .cursor_col = 0,
-    .mode = GAME_MODE_STOPPED,
+    .mode = GOL_MODE_STOPPED,
     .window = NULL,
     .renderer = NULL
 };
@@ -49,7 +49,7 @@ void initialization(void)
 
     grid_randomize(game.grid, ALIVE_PERCENT);
 
-    game.mode = GAME_MODE_RUNNING;
+    game.mode = GOL_MODE_RUNNING;
 }
 
 void finalization(void)
@@ -76,16 +76,16 @@ void update(void)
 {
     switch (game.mode)
     {
-        case GAME_MODE_RUNNING:
+        case GOL_MODE_RUNNING:
             update_running();
             break;
-        case GAME_MODE_EDITING:
+        case GOL_MODE_EDITING:
             update_editing();
             break;
-        case GAME_MODE_PAUSED:
+        case GOL_MODE_PAUSED:
             update_paused();
             break;
-        case GAME_MODE_STOPPED:
+        case GOL_MODE_STOPPED:
             update_stopped();
             break;
         default:
@@ -100,7 +100,7 @@ void output(void)
     SDL_RenderClear(game.renderer);
 
     grid_draw(game.grid, render_cell, NULL);
-    if (game.mode == GAME_MODE_EDITING)
+    if (game.mode == GOL_MODE_EDITING)
     {
         render_cursor(game.cursor_col, game.cursor_row);
     }

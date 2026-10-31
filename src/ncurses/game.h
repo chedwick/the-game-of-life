@@ -5,7 +5,9 @@
 #include <stdbool.h>
 
 typedef struct Game {
+    grid_s *grid;
     mode_e mode;
+
     bool update;
     bool output;
 } game_s;
