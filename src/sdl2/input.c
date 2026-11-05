@@ -15,9 +15,13 @@ void read_input_devices(void)
                 game.mode = GOL_MODE_STOPPED;
                 break;
             case SDL_KEYDOWN:
+                if (game.event.key.repeat)
+                    break;
                 switch (game.event.key.keysym.sym)
                 {
                     case SDLK_ESCAPE:
+                        if (game.mode == GOL_MODE_STOPPED)
+                            break;
                         if (game.mode == GOL_MODE_RUNNING)
                             game.mode = GOL_MODE_STOPPED;
                         else
@@ -51,6 +55,8 @@ void read_input_devices(void)
                         game.key = GOL_INPUT_RIGHT;
                         break;
                     case SDLK_RETURN:
+                        if (game.mode == GOL_MODE_STOPPED)
+                            break;
                         if (game.mode == GOL_MODE_RUNNING)
                             game.mode = GOL_MODE_EDITING;
                         else
