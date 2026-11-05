@@ -7,6 +7,8 @@
 
 void read_input_devices(void)
 {
+    game.key = GOL_INPUT_NONE;
+
     while (SDL_PollEvent(&game.event))
     {
         switch (game.event.type)
@@ -15,8 +17,6 @@ void read_input_devices(void)
                 game.mode = GOL_MODE_STOPPED;
                 break;
             case SDL_KEYDOWN:
-                if (game.event.key.repeat)
-                    break;
                 switch (game.event.key.keysym.sym)
                 {
                     case SDLK_ESCAPE:
