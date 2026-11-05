@@ -27,5 +27,7 @@ int main(int argc, char *argv[])
     }
 
     finalization();
-    return EXIT_SUCCESS;
+
+    // return EXIT_SUCCESS;
+    exit(EXIT_SUCCESS);
 }
