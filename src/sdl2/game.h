@@ -22,6 +22,11 @@
 #define SPEED 200
 #define FRAME_RATE 10
 
+// Colors (R, G, B, A)
+#define COLOR_BACKGROUND ((SDL_Color) {1, 11, 2, 255})
+#define COLOR_TEXT ((SDL_Color) {255, 255, 255, 255})
+#define COLOR_CELL ((SDL_Color) {30, 180, 60, 255})
+
 // Icon
 #define ICON_FILE "icon.png"
 
