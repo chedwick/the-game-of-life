@@ -8,6 +8,10 @@ BUILD_DIR = build
 
 TARGET = $(BUILD_DIR)/gol
 
+ASSETS_DIR = assets
+FONT_SRC = $(ASSETS_DIR)/pixel_emulator.otf
+FONT = $(BUILD_DIR)/font.otf
+
 SDL2_SOURCES = sdl2/sdl.c \
 			   sdl2/game.c \
 			   sdl2/input.c \
@@ -26,7 +30,7 @@ endif
 CFLAGS += $(SDL2_CFLAGS)
 LDLIBS = $(SDL2_LIBS)
 
-all: $(TARGET)
+all: $(TARGET) $(FONT)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
@@ -34,15 +38,19 @@ $(BUILD_DIR):
 $(TARGET): $(OBJECTS) | $(BUILD_DIR)
 	$(CC) $(OBJECTS) $(LDLIBS) -o $@
 
+$(FONT): $(FONT_SRC) | $(BUILD_DIR)
+	cp $< $@
+
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJECTS) $(TARGET)
+	rm -f $(OBJECTS) $(TARGET) $(FONT)
 	rmdir $(BUILD_DIR) 2>/dev/null || true
 
 debug:
 	@echo TARGET: $(TARGET)
+	@echo FONT: $(FONT)
 	@echo OBJECTS: $(OBJECTS)
 	@echo SOURCES: $(SOURCES)
 	@echo CFLAGS: $(CFLAGS)
