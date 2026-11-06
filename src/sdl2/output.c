@@ -29,9 +29,7 @@ void render_menu(void)
         game.text_menu_randomize_rect,
         game.text_menu_step_rect,
         game.text_menu_clear_rect,
-        game.text_menu_quit_rect,
-        game.text_menu_set_unset_cell_rect,
-        game.text_menu_step_generation_rect,
+        game.text_menu_quit_rect
     };
     int max_w = 0;
     int text_h = 0;
@@ -96,25 +94,6 @@ void render_menu(void)
     dest.x = (WINDOW_WIDTH - dest.w) / 2;
     dest.y = TILE_HEIGHT * 16;
     SDL_RenderCopy(game.renderer, game.text_menu_quit, NULL, &dest);
-
-    dest = game.text_menu_return_to_game_rect;
-    dest.x = (WINDOW_WIDTH - dest.w) / 2;
-    dest.y = TILE_HEIGHT * 18;
-    SDL_RenderCopy(game.renderer, game.text_menu_return_to_game, NULL, &dest);
-
-    dest = game.text_menu_set_unset_cell_rect;
-    dest.x = (WINDOW_WIDTH - dest.w) / 2;
-    dest.y = TILE_HEIGHT * 20;
-    SDL_RenderCopy(game.renderer, game.text_menu_set_unset_cell, NULL, &dest);
-
-    dest = game.text_menu_step_generation_rect;
-    dest.x = (WINDOW_WIDTH - dest.w) / 2;
-    dest.y = TILE_HEIGHT * 22;
-    SDL_RenderCopy(game.renderer, game.text_menu_step_generation, NULL, &dest);
-
-    dest = game.text_menu_clear_rect;
-    dest.x = (WINDOW_WIDTH - dest.w) / 2;
-    dest.y = TILE_HEIGHT * 24;
 }
 
 static void sdl_draw_rect(int col, int row, int r, int g, int b, int a)
