@@ -33,7 +33,8 @@ void initialization(void)
     SDL_Window *window = sdl_window_create(TITLE, WINDOW_HEIGHT, WINDOW_WIDTH);
     if (!window)
         return;
-    game.window = window;   
+    game.window = window;
+    sdl_window_set_icon(game.window, ICON_FILE);
 
     SDL_Renderer *renderer = sdl_renderer_create(game.window);
     if (!renderer)
@@ -45,7 +46,7 @@ void initialization(void)
         return;
     game.font = font;
 
-    SDL_Color color = {255, 255, 255, 255};
+    SDL_Color color = COLOR_TEXT;
     game.text_menu =
         sdl_text_create(game.renderer, game.font, TEXT_MENU,
                         color, &game.text_menu_rect);
@@ -135,7 +136,8 @@ void update(void)
 
 void output(void)
 {
-    SDL_SetRenderDrawColor(game.renderer, 63, 63, 116, 255);
+    SDL_Color c = COLOR_BACKGROUND;
+    SDL_SetRenderDrawColor(game.renderer, c.r, c.g, c.b, c.a);
     SDL_RenderClear(game.renderer);
 
     grid_draw(game.grid, render_cell, NULL);

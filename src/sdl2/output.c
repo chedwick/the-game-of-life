@@ -9,7 +9,10 @@ void render_cell(int col, int row, int alive, void *data)
 {
     (void) data; // Suppress unused parameter warning
     if (alive)
-        sdl_draw_rect(col, row, 255, 0, 0, 255);
+    {
+        SDL_Color c = COLOR_CELL;
+        sdl_draw_rect(col, row, c.r, c.g, c.b, c.a);
+    }
     // else
     //     sdl_draw_rect(row, col, 0, 0, 0, 255);
 }
