@@ -108,6 +108,43 @@ void sdl_font_destroy(TTF_Font *font)
         TTF_CloseFont(font);
 }
 
+// Loads an image located next to the executable (e.g. build/icon.png).
+SDL_Surface* sdl_image_load(const char *filename)
+{
+    char path[1024];
+    char *base_path = SDL_GetBasePath();
+    snprintf(path, sizeof(path), "%s%s", base_path ? base_path : "", filename);
+    SDL_free(base_path);
+
+    SDL_Surface *surface = IMG_Load(path);
+    if (surface)
+        return surface;
+
+    printf("Image loading failed (%s): %s\n", path, IMG_GetError());
+    return NULL;
+}
+
+void sdl_image_destroy(SDL_Surface *surface)
+{
+    if (surface)
+        SDL_FreeSurface(surface);
+}
+
+// Sets the window icon from an image; SDL copies the pixels, so the
+// surface can be freed right away.
+void sdl_window_set_icon(SDL_Window *window, const char *filename)
+{
+    if (!window || !filename)
+        return;
+
+    SDL_Surface *icon = sdl_image_load(filename);
+    if (!icon)
+        return;
+
+    SDL_SetWindowIcon(window, icon);
+    sdl_image_destroy(icon);
+}
+
 // Renders text into a texture; rect receives its size (position 0, 0).
 SDL_Texture* sdl_text_create(SDL_Renderer *renderer, TTF_Font *font,
                              const char *text, SDL_Color color,

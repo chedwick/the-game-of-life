@@ -22,6 +22,9 @@
 #define SPEED 200
 #define FRAME_RATE 10
 
+// Icon
+#define ICON_FILE "icon.png"
+
 // Font
 #define FONT_FILE "font.otf"
 #define FONT_SIZE_MENU 24

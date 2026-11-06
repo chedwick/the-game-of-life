@@ -17,6 +17,11 @@ void sdl_renderer_destroy(SDL_Renderer *renderer);
 TTF_Font* sdl_font_load(const char *filename, int size);
 void sdl_font_destroy(TTF_Font *font);
 
+SDL_Surface* sdl_image_load(const char *filename);
+void sdl_image_destroy(SDL_Surface *surface);
+
+void sdl_window_set_icon(SDL_Window *window, const char *filename);
+
 SDL_Texture* sdl_text_create(SDL_Renderer *renderer, TTF_Font *font,
                              const char *text, SDL_Color color,
                              SDL_Rect *rect);

@@ -33,7 +33,8 @@ void initialization(void)
     SDL_Window *window = sdl_window_create(TITLE, WINDOW_HEIGHT, WINDOW_WIDTH);
     if (!window)
         return;
-    game.window = window;   
+    game.window = window;
+    sdl_window_set_icon(game.window, ICON_FILE);
 
     SDL_Renderer *renderer = sdl_renderer_create(game.window);
     if (!renderer)
