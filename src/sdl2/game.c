@@ -46,9 +46,30 @@ void initialization(void)
     game.font = font;
 
     SDL_Color color = {255, 255, 255, 255};
-    game.text_menu = sdl_text_create(game.renderer, game.font, TEXT_MENU,
-                                     color, &game.text_menu_rect);
-
+    game.text_menu =
+        sdl_text_create(game.renderer, game.font, TEXT_MENU,
+                        color, &game.text_menu_rect);
+    game.text_menu_escape =
+        sdl_text_create(game.renderer, game.font, TEXT_MENU_ESCAPE,
+                        color, &game.text_menu_escape_rect);
+    game.text_menu_return_to_game =
+        sdl_text_create(game.renderer, game.font, TEXT_MENU_RETURN_TO_GAME,
+                        color, &game.text_menu_return_to_game_rect);
+    game.text_menu_space =
+        sdl_text_create(game.renderer, game.font, TEXT_MENU_SPACE,
+                        color, &game.text_menu_space_rect);
+    game.text_menu_randomize =
+        sdl_text_create(game.renderer, game.font, TEXT_MENU_RANDOMIZE,
+                        color, &game.text_menu_randomize_rect);
+    game.text_menu_step =
+        sdl_text_create(game.renderer, game.font, TEXT_MENU_STEP,
+                        color, &game.text_menu_step_rect);
+    game.text_menu_clear =
+        sdl_text_create(game.renderer, game.font, TEXT_MENU_CLEAR,
+                        color, &game.text_menu_clear_rect);
+    game.text_menu_quit =
+        sdl_text_create(game.renderer, game.font, TEXT_MENU_QUIT,
+                        color, &game.text_menu_quit_rect);
 
     frequency = SDL_GetPerformanceFrequency();
     target_frame_time = 1.0 / FRAME_RATE;
@@ -61,7 +82,7 @@ void initialization(void)
 
     grid_randomize(game.grid, ALIVE_PERCENT);
 
-    game.mode = GOL_MODE_RUNNING;
+    game.mode = GOL_MODE_EDITING;
 }
 
 void finalization(void)
@@ -121,9 +142,8 @@ void output(void)
     if (game.mode == GOL_MODE_EDITING)
     {
         render_cursor(game.cursor_col, game.cursor_row);
+        render_menu();
     }
-
-    render_menu();
 
     SDL_RenderPresent(game.renderer);
 }
