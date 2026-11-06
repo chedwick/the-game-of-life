@@ -4,6 +4,7 @@
 
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 // Game labels
 #define TITLE "THE GAME OF LIFE"
@@ -21,15 +22,49 @@
 #define SPEED 200
 #define FRAME_RATE 10
 
-// Font sizes
-#define FONT_SIZE_SCORE 24
+// Font
+#define FONT_FILE "font.otf"
+#define FONT_SIZE_MENU 24
 
-
+// UI labels
+#define TEXT_MENU "MENU"
+#define TEXT_MENU_ESCAPE "<ESC> RETURN TO GAME"
+#define TEXT_MENU_RETURN_TO_GAME "<ENTER> RETURN TO GAME"
+#define TEXT_MENU_SPACE "<SPACE> SET/UNSET CELL"
+#define TEXT_MENU_RANDOMIZE "<R> RANDOMIZE"
+#define TEXT_MENU_STEP "<S> STEP GENERATION"
+#define TEXT_MENU_CLEAR "<C> CLEAR THE BOARD"
+#define TEXT_MENU_QUIT "<Q> QUIT THE GAME"
 
 typedef struct Game {
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Event event;
+
+    TTF_Font *font;
+    SDL_Texture *text_menu;
+    SDL_Rect text_menu_rect;
+
+    SDL_Texture *text_menu_escape;
+    SDL_Rect text_menu_escape_rect;
+
+    SDL_Texture *text_menu_space;
+    SDL_Rect text_menu_space_rect;
+
+    SDL_Texture *text_menu_randomize;
+    SDL_Rect text_menu_randomize_rect;
+
+    SDL_Texture *text_menu_step;
+    SDL_Rect text_menu_step_rect;
+
+    SDL_Texture *text_menu_clear;
+    SDL_Rect text_menu_clear_rect;
+
+    SDL_Texture *text_menu_quit;
+    SDL_Rect text_menu_quit_rect;
+
+    SDL_Texture *text_menu_return_to_game;
+    SDL_Rect text_menu_return_to_game_rect;
 
     grid_s *grid;
     mode_e mode;

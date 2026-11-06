@@ -85,3 +85,56 @@ void sdl_renderer_destroy(SDL_Renderer *renderer)
     if (renderer)
         SDL_DestroyRenderer(renderer);
 }
+
+// Loads a font located next to the executable (e.g. build/font.otf).
+TTF_Font* sdl_font_load(const char *filename, int size)
+{
+    char path[1024];
+    char *base_path = SDL_GetBasePath();
+    snprintf(path, sizeof(path), "%s%s", base_path ? base_path : "", filename);
+    SDL_free(base_path);
+
+    TTF_Font *font = TTF_OpenFont(path, size);
+    if (font)
+        return font;
+
+    printf("Font loading failed (%s): %s\n", path, TTF_GetError());
+    return NULL;
+}
+
+void sdl_font_destroy(TTF_Font *font)
+{
+    if (font)
+        TTF_CloseFont(font);
+}
+
+// Renders text into a texture; rect receives its size (position 0, 0).
+SDL_Texture* sdl_text_create(SDL_Renderer *renderer, TTF_Font *font,
+                             const char *text, SDL_Color color,
+                             SDL_Rect *rect)
+{
+    if (!renderer || !font || !text)
+        return NULL;
+
+    SDL_Surface *surface = TTF_RenderUTF8_Solid(font, text, color);
+    if (!surface)
+    {
+        printf("Text rendering failed: %s\n", TTF_GetError());
+        return NULL;
+    }
+
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture && rect)
+        *rect = (SDL_Rect) {0, 0, surface->w, surface->h};
+    else if (!texture)
+        printf("Text texture creation failed: %s\n", SDL_GetError());
+
+    SDL_FreeSurface(surface);
+    return texture;
+}
+
+void sdl_text_destroy(SDL_Texture *texture)
+{
+    if (texture)
+        SDL_DestroyTexture(texture);
+}
