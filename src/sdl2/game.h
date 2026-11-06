@@ -4,6 +4,7 @@
 
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 // Game labels
 #define TITLE "THE GAME OF LIFE"
@@ -21,8 +22,12 @@
 #define SPEED 200
 #define FRAME_RATE 10
 
-// Font sizes
-#define FONT_SIZE_SCORE 24
+// Font
+#define FONT_FILE "font.otf"
+#define FONT_SIZE_MENU 24
+
+// UI labels
+#define TEXT_MENU "MENU"
 
 
 
@@ -30,6 +35,10 @@ typedef struct Game {
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Event event;
+
+    TTF_Font *font;
+    SDL_Texture *text_menu;
+    SDL_Rect text_menu_rect;
 
     grid_s *grid;
     mode_e mode;

@@ -17,7 +17,9 @@ game_s game = {
     .cursor_col = 0,
     .mode = GOL_MODE_STOPPED,
     .window = NULL,
-    .renderer = NULL
+    .renderer = NULL,
+    .font = NULL,
+    .text_menu = NULL
 };
 
 static Uint64 frequency;
@@ -38,6 +40,16 @@ void initialization(void)
         return;
     game.renderer = renderer;   
 
+    TTF_Font *font = sdl_font_load(FONT_FILE, FONT_SIZE_MENU);
+    if (!font)
+        return;
+    game.font = font;
+
+    SDL_Color color = {255, 255, 255, 255};
+    game.text_menu = sdl_text_create(game.renderer, game.font, TEXT_MENU,
+                                     color, &game.text_menu_rect);
+
+
     frequency = SDL_GetPerformanceFrequency();
     target_frame_time = 1.0 / FRAME_RATE;
 
@@ -57,11 +69,17 @@ void finalization(void)
     grid_destroy(game.grid);
     game.grid = NULL;
 
-    sdl_window_destroy(game.window);
-    game.window = NULL;
+    sdl_text_destroy(game.text_menu);
+    game.text_menu = NULL;
+
+    sdl_font_destroy(game.font);
+    game.font = NULL;
 
     sdl_renderer_destroy(game.renderer);
     game.renderer = NULL;
+
+    sdl_window_destroy(game.window);
+    game.window = NULL;
 
     sdl_finalization();
 }
@@ -105,6 +123,8 @@ void output(void)
         render_cursor(game.cursor_col, game.cursor_row);
     }
 
+    render_menu();
+
     SDL_RenderPresent(game.renderer);
 }
 
@@ -120,17 +140,3 @@ void pacing(void)
         SDL_Delay((Uint32) (remaining * 1000.0));
     }
 }
-
-// int initialize_fonts(void)
-// {
-//     gfx_font_s *font = construct_gfx_font("assets/gabs_pixel.ttf");
-//     if (font)
-//     {
-//         SDL_Color color = {255, 255, 255, 255};
-//         gfx_gpu_text_s *text_score =
-//             gfx_gpu_text_render(game.renderer, font, "SCORE", color);
-//         game.font = font;
-//         game.text_score = text_score;
-//     }
-//     return 0;
-// }
